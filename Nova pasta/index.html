@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Visão e Reflexo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            margin: 0; padding: 0;
+            display: flex; justify-content: center; align-items: center;
+            height: 100vh; text-align: center;
+        }
+        .painel {
+            background-color: #1e1e1e;
+            padding: 40px; border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.7);
+            max-width: 400px; width: 90%;
+        }
+        .botao {
+            background-color: #28a745; color: white;
+            padding: 15px 30px; border: none; border-radius: 6px;
+            font-size: 18px; font-weight: bold; cursor: pointer;
+            margin-top: 20px; transition: 0.2s; width: 100%;
+        }
+        .botao:hover { background-color: #218838; }
+        
+        /* Tela Cheia do Susto */
+        #tela-cheia-container {
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100vw; height: 100vh; background-color: black; z-index: 9999;
+        }
+        #tela-cheia-container img { width: 100%; height: 100%; object-fit: cover; }
+    </style>
+</head>
+<body>
+
+    <div class="painel">
+        <h2>Teste de Ilusão de Ótica</h2>
+        <p>Clique no botão abaixo para iniciar o teste de foco em tela cheia.</p>
+        <button class="botao" onclick="entrarEmTelaCheia()">Iniciar Teste</button>
+    </div>
+
+    <!-- Imagem fixa do susto que fica escondida -->
+    <div id="tela-cheia-container" onclick="sairDaTelaCheia()">
+        <img id="foto-expandida" src="https://imgur.com" alt="Susto">
+    </div>
+
+    <!-- Áudio do susto -->
+    <audio id="meu-audio" src="susto.mp3"></audio>
+
+    <script>
+        const container = document.getElementById('tela-cheia-container');
+        const som = document.getElementById('meu-audio');
+
+        function entrarEmTelaCheia() {
+            container.style.display = 'block';
+            
+            // Toca o áudio
+            som.currentTime = 0; 
+            som.play().catch(e => console.log("Erro ao tocar áudio:", e));
+
+            // Ativa a tela cheia de verdade
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen();
+            } else if (document.documentElement.webkitRequestFullscreen) { /* Safari */
+                document.documentElement.webkitRequestFullscreen();
+            } else if (document.documentElement.msRequestFullscreen) { /* IE11 */
+                document.documentElement.msRequestFullscreen();
+            }
+        }
+
+        function sairDaTelaCheia() {
+            container.style.display = 'none';
+            som.pause();
+            if (document.fullscreenElement) {
+                document.exitFullscreen();
+            }
+        }
+    </script>
+</body>
+</html>
